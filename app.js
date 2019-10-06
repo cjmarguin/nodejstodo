@@ -5,6 +5,6 @@ app.get('/', function (req, res){
   res.send('hello world');
 });
 
-app.listen(3000, function(){
-   console.log('example app');
+app.listen(app.get("port"), function(){
+   console.log('example app' + app.get("port"));
 });
