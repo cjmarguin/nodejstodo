@@ -19,7 +19,8 @@
   "homepage": "https://github.com/JoseJCanedo/nodejsHello#readme",
   "dependencies": {
     "ejs": "^2.7.1",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "body-parser": "^1.17.2"
   },
   "engines": {
     "node": "10.x"
