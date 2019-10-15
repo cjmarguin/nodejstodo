@@ -1,7 +1,7 @@
 var http = require('http');
+var path = require('path');
 var express = require('express');
 var bodyParser = require("body-parser");
-var path = require('path');
 var app = express();
 var port = process.env.PORT || 3000;
 
@@ -14,11 +14,11 @@ var task = ["buy socks", "practise with nodejs"];
 var complete = ["finish jquery"];
 
 app.get("/", function(req, res) {
-    res.render("index", { task: task});
+    res.render("index", { task: task, complete: complete});
 });
 
 app.post('/addtask', function (req, res) {
-    var newTask = req.body.newtask;
+  var newTask = req.body.newtask;
     task.push(newTask);
     res.redirect("/");
 });
@@ -26,7 +26,7 @@ app.post('/addtask', function (req, res) {
 app.post("/removetask", function(req, res) {
     var completeTask = req.body.check;
     if (typeof completeTask === "string") {
-      complete.push(completeTask);
+     complete.push(completeTask);
       task.splice(task.indexOf(completeTask), 1);
     } else if (typeof completeTask === "object") {
       for (var i = 0; i < completeTask.length; i++) {     
