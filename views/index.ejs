@@ -14,7 +14,8 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
-         
+          <a>fake</a>
+          <a>button</a>
         </ul>
       </div>
     </nav>
@@ -33,6 +34,7 @@
        </form>
        <h2> Completed task </h2>
        <% for(var i = 0; i < complete.length; i++){ %>
+        <a class=<%= complete[i] %> />
          <li><input type="checkbox" checked><%= complete[i] %> </li>
        <% } %>
     </div>
