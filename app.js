@@ -6,11 +6,11 @@ app.set('view engine', 'ejs');
 app.arguments(express.static('public'));
 
 app.get('/', function (req, res){
-  res.render('index');
+  res.render('index', {image : 'this is it', err: 'this is error'});
 });
 
 app.post('/', function(req, res){
-  res.render('index');
+  res.render('index', {image : 'this is it', err: 'this is error'});
 });
 
 app.listen(port, function(){
