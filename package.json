@@ -18,9 +18,10 @@
   },
   "homepage": "https://github.com/JoseJCanedo/nodejsHello#readme",
   "dependencies": {
+    "body-parser": "^1.17.2",
     "ejs": "^2.7.1",
     "express": "^4.17.1",
-    "body-parser": "^1.17.2"
+    "mongoose": "^5.7.5"
   },
   "engines": {
     "node": "10.x"
