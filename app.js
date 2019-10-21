@@ -22,16 +22,19 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 var task = [];
 var complete = ["finish jquery"];
 
-
-
 app.get("/", function(req, res) {
-    Todo.find({"done": false}, function(err, todo) {
+    Todo.find( function(err, todo) {
       if (err) {
         console.log(err);
       }else{
         task = [];
+        complete = [];
         for(i = 0; i < todo.length ; i++){
-            task.push(todo[i].item);
+            if(todo[i].done){
+              complete.push(todo[i].item);
+            }else {
+              task.push(todo[i].item);
+            }
         }
         res.render("index", { task: task, complete: complete});
       }
@@ -56,12 +59,34 @@ app.post('/addtask', function (req, res) {
 app.post("/removetask", function(req, res) {
     var completeTask = req.body.check;
     if (typeof completeTask === "string") {
-     complete.push(completeTask);
-      task.splice(task.indexOf(completeTask), 1);
+      Todo.update({"item" : completeTask}, {"done": true}, function(err, affected, resp){
+        console.log(resp);
+      });
+      // Todo.findOneAndRemove({"item" : completeTask},function(err, resp){
+      //   console.log(resp);
+      // });
     } else if (typeof completeTask === "object") {
       for (var i = 0; i < completeTask.length; i++) {     
-        complete.push(completeTask[i]);
-        task.splice(task.indexOf(completeTask[i]), 1);
+        Todo.update({"item" : completeTask[i]}, {"done": true}, function(err, affected, resp){
+          console.log(resp);
+        });
+      }
+    }
+   return res.redirect("/");
+});
+
+app.post("/deletetask", function(req, res){
+    var deleteTask = req.body.delete;
+    console.log(deleteTask);
+    if (typeof deleteTask === "string") {
+      Todo.findOneAndRemove({"item" : deleteTask},function(err, resp){
+        console.log(resp);
+      });
+    } else if (typeof deleteTask === "object") {
+      for (var i = 0; i < deleteTask.length; i++) {     
+        Todo.findOneAndRemove({"item" : deleteTask[i]},function(err, resp){
+          console.log(resp);
+        });
       }
     }
    return res.redirect("/");
