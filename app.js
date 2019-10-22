@@ -12,7 +12,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 const Todo = require('./models/todo.model');
 
 const mongoose = require('mongoose');
-let dev_db_url = 'mongodb+srv://testConnection:Gecko784@nodetodoexample-iqnde.mongodb.net/test?retryWrites=true&w=majority';
+// test  tlJlJyDqEMasL7V9
+let dev_db_url = mongodb+srv://test:tlJlJyDqEMasL7V9@cluster0-0fw5o.mongodb.net/test?retryWrites=true&w=majority
+    //'mongodb+srv://testConnection:Gecko784@nodetodoexample-iqnde.mongodb.net/test?retryWrites=true&w=majority';
 let mongoDB = process.env.MONGODB_URI || dev_db_url;
 mongoose.connect(mongoDB);
 mongoose.Promise = global.Promise;
