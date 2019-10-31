@@ -9,86 +9,52 @@ app.set('view engine', 'ejs');
 app.use(express.static("public"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-const Todo = require('./models/todo.model');
+const fetch = require('node-fetch');
 
-const mongoose = require('mongoose');
-// test  tlJlJyDqEMasL7V9
-let mongoDB = 'mongodb+srv://test:tlJlJyDqEMasL7V9@cluster0-0fw5o.mongodb.net/test?retryWrites=true&w=majority';
-// 'mongodb+srv://testConnection:Gecko784@nodetodoexample-iqnde.mongodb.net/test?retryWrites=true&w=majority';
-mongoose.connect(mongoDB);
-mongoose.Promise = global.Promise;
-let db = mongoose.connection;
-db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-
-var task = [];
-var complete = ["finish jquery"];
+var img = '';
+var year = '';
+var title = '';
+var total = 2220;
 
 app.get("/", function(req, res) {
-    Todo.find( function(err, todo) {
-      if (err) {
-        console.log(err);
-      }else{
-        task = [];
-        complete = [];
-        for(i = 0; i < todo.length ; i++){
-            if(todo[i].done){
-              complete.push(todo[i].item);
-            }else {
-              task.push(todo[i].item);
-            }
-        }
-        res.render("index", { task: task, complete: complete});
-      }
+    fetchComic(null);
+    res.render("index", { img: img, year: year, title: title, showButton: false});
+});
+
+app.get('/getRandom', function(req, res){
+  var rand = Math.floor((Math.random() * total) + 1);
+  fetchComic(rand);
+  res.render("index", { img: img, year: year, title: title, showButton: true});
+});
+
+app.get('/updateRandom', function(req, res){
+  var rand = Math.floor((Math.random() * total) + 1);
+  fetchComic(rand);
+  res.render("comicFrame", { img: img, year: year, title: title, showButton: true});
+});
+
+function fetchComic(rand) {
+  var url;
+  var current = false;
+  if(rand){
+    url = 'http://xkcd.com/' + rand + '/info.0.json';
+  }else{
+    current = true;
+    url = 'http://xkcd.com/info.0.json'
+  }
+  fetch(url)
+    .then(res => res.json())
+    .then(data => {
+    img = data.img;
+    title = data.title;
+    year = data.year;
+    if(current){
+      total = data.num;
+    }
+    }).catch(err => {
+      res.redirect('/error');
     });
-});
-
-app.post('/addtask', function (req, res) {
-    let todo = new Todo(
-      {
-          item: req.body.newtask,
-          done: false
-      }
-    );
-    todo.save(function (err) {
-      if (err) {
-          console.log(err);
-      }
-      res.redirect("/");
-    })
-});
-
-app.post("/removetask", function(req, res) {
-    var completeTask = req.body.check;
-    if (typeof completeTask === "string") {
-      Todo.update({"item" : completeTask}, {"done": true}, function(err, affected, resp){
-        console.log(resp);
-      });
-    } else if (typeof completeTask === "object") {
-      for (var i = 0; i < completeTask.length; i++) {     
-        Todo.update({"item" : completeTask[i]}, {"done": true}, function(err, affected, resp){
-          console.log(resp);
-        });
-      }
-    }
-   return res.redirect("/");
-});
-
-app.post("/deletetask", function(req, res){
-    var deleteTask = req.body.delete;
-    console.log(deleteTask);
-    if (typeof deleteTask === "string") {
-      Todo.findOneAndRemove({"item" : deleteTask},function(err, resp){
-        console.log(resp);
-      });
-    } else if (typeof deleteTask === "object") {
-      for (var i = 0; i < deleteTask.length; i++) {     
-        Todo.findOneAndRemove({"item" : deleteTask[i]},function(err, resp){
-          console.log(resp);
-        });
-      }
-    }
-   return res.redirect("/");
-});
+}
 
 http.createServer(app).listen(port, function(){
    console.log('example app' + port);
