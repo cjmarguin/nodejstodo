@@ -1,29 +1,65 @@
-<html>
+<!doctype html>
+<html lang="en">
   <head>
-    <title> ToDo App </title>
-    <link href="https://fonts.googleapis.com/css?family=Lato:100"     rel="stylesheet">
-    <link href="/css/styles.css" rel="stylesheet">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>hahahah</title>
   </head>
-  <body>
-    <div class="container">
-       <h2> A Simple ToDo List App </h2>
-       <form action ="/addtask" method="POST">
-        <input type="text" name="newtask" placeholder="add new task">        <button> Add Task </button>
-        <h2> Added Task </h2>
-          <% for( var i = 0; i < task.length; i++){ %>
-            <li><input type="checkbox" name="check" value="<%= task[i] %>" /> <%= task[i] %> </li>
-          <% } %>
-        <button formaction="/removetask" type="submit"> Remove </button>
-      </form>
-      <h2> Completed task </h2>
-      <form action ="/deletetask" method="POST">
-        <ul>
-          <% for(var i = 0; i < complete.length; i++){ %>
-            <li><input type="checkbox" name="delete" value="<%= complete[i] %>" ><%= complete[i] %> </li>
-          <% } %>
+  <body style="padding-bottom: 75px;">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+      <a class="navbar-toggler navbar-brand" href="https://csunodejs.herokuapp.com/"><i class="fa fa-2x fa-home"></i></a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li><a href="/">Current</a></li>
+          <li style="padding-left: 15px"><a href="/getrandom">Random</a></li>
         </ul>
-        <button formaction="/deletetask" type="submit"> Delete Tasks </button>
-      </form>
+      </div>
+    </nav>
+    <div>
+      <div class="row " style="padding-top: 15px">
+        <div class="mx-auto">
+          <% if(showButton){ %>
+            <button id="eventForm">Generate Random</button>
+          <% } %> 
+        </div>
+      </div>
+      <div class="row"  style="margin-right: 0px; margin-left: 0px; text-align: center;">
+          <div class="mx-auto" style="padding:20px" id="target_div">        
+            <% include comicFrame.ejs %>
+          </div>
+      </div>
     </div>
+    <nav class="navbar fixed-bottom navbar-dark bg-dark">
+      <a class="navbar-brand" href="#">Fixed bottom NavBar to get back to where you need</a>
+    </nav>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://use.fontawesome.com/f1c966bcb4.js"></script>
+    <script>
+      $(document).ready(function(){
+        $('#eventForm').on('click', function (e) {
+          e.preventDefault();
+          $.ajax({
+              url: '/updateRandom',
+              data: {},
+              type: 'GET',
+              success: function(data)
+                {
+                    $('div #target_div').html(data)
+                },
+                error: function()
+                {
+                    alert("Failed to get data.");
+              }
+        });
+        })
+});
+    </script>
   </body>
 </html>
